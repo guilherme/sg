@@ -1,0 +1,4 @@
+[root]
+name = "rust-fzf"
+version = "0.1.0"
+
