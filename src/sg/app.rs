@@ -8,6 +8,15 @@ pub enum ReturnType {
     Selected,
 }
 
+pub struct Foo;
+
+impl Foo {
+
+    pub fn trigger(&self, event: &'static str) -> () {
+    }
+
+}
+
 pub struct App {
     headless: bool,
     unfiltered_results: Vec<String>,
@@ -19,6 +28,7 @@ pub struct App {
 
 impl App {
 
+
     pub fn new(headless: bool, filter: String, input: InputSource, return_type: ReturnType) -> Self {
         App { headless, filter, input, return_type, unfiltered_results: vec![], filtered_results: vec![] }
     }
@@ -27,7 +37,16 @@ impl App {
         self.create_ui();
         self.start_filtering();
         self.update_ui();
+
         0
+    }
+
+    pub fn view(&self) -> Foo {
+        Foo
+    }
+
+    pub fn results(&self) -> Vec<String> {
+        vec![String::from("superman"), String::from("batman")]
     }
 
 
