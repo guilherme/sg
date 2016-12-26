@@ -46,3 +46,22 @@ impl App {
     }
 
 }
+
+#[cfg(test)]
+mod tests {
+
+    use super::{App, InputSource, ReturnType};
+
+    #[test]
+    fn it_does_basic_filtering() {
+        let headless = true;
+        let filter = String::from("man");
+        let input_source =  InputSource::Fixed(vec!["superman".to_string(), "joker".to_string(), "batman".to_string()]);
+        let return_type = ReturnType::All;
+        let app = App::new(headless, filter, input_source, return_type);
+        app.start();
+        app.view().trigger("control c");
+        let results = app.results();
+        assert_eq!(results, vec!["superman".to_string(), "batman".to_string()]);
+    }
+}
