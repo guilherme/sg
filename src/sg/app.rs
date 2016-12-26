@@ -1,18 +1,17 @@
 pub struct App {
     headless: bool,
+    unfiltered_results: Vec<String>,
+    filtered_results: Vec<String>,
 }
 
 impl App {
 
     pub fn new(headless: bool) -> Self {
-        App { headless: headless }
+        App { headless: headless, unfiltered_results: vec![], filtered_results: vec![] }
     }
 
     pub fn start(&self) -> i32 {
-        match self.headless {
-            true => { println!("Running in headless mode!") }
-            false => { println!("Running in UI mode!") }
-        }
+        if self.headless { println!("Running in headless mode!") }
         0
     }
 
