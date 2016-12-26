@@ -4,6 +4,8 @@ extern crate clap;
 use clap::App as Cli;
 use clap::Arg;
 
+use std::process::exit;
+
 use sg::App;
 
 fn main() {
@@ -20,6 +22,7 @@ fn main() {
 
   let headless = matches.is_present("headless");
 
-  App::new(headless).start();
+  let exit_code = App::new(headless).start();
 
+  exit(exit_code);
 }

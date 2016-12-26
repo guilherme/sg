@@ -10,11 +10,12 @@ impl App {
         App { headless: headless }
     }
 
-    pub fn start(&self) {
+    pub fn start(&self) -> i32 {
         match self.headless {
             true => { println!("Running in headless mode!") }
             false => { println!("Running in UI mode!") }
         }
+        0
     }
 
 }
