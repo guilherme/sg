@@ -12,11 +12,14 @@ fn main() {
                         .version("0.1")
                         .author("Sebastian Glazebrook, Guilherme Reis Campos")
                         .about("The best fuzzy finder ever")
-                        .arg(Arg::with_name("config")
+                        .arg(Arg::with_name("headless")
                              .short("h")
                              .long("headless")
                              .help("Run sg without a UI. Commonly used for testing"))
                         .get_matches();
 
-  let _ = App::new();
+  let headless = matches.is_present("headless");
+
+  App::new(headless).start();
+
 }
