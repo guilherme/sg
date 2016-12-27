@@ -1,24 +1,26 @@
 use super::view::View;
-use super::super::InputSource;
 
-pub struct HeadlessUI {
-    input_source: InputSource,
-}
+pub struct HeadlessUI;
 
 impl HeadlessUI {
 
-    pub fn new(input_source: InputSource) -> Self {
-        HeadlessUI { input_source }
+    pub fn new() -> Self {
+        HeadlessUI { }
+    }
+
+    fn listen_for_input(&self) {
+        // TODO listen for input from the user
     }
 }
 
 impl View for HeadlessUI {
 
     fn init(&self) {
-        // TODO implement me
+        self.listen_for_input();
     }
 
     fn trigger(&self, event: &'static str) -> () {
         // TODO implement me
+        // put an event on a queue?
     }
 }
