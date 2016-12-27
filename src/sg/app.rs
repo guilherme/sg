@@ -39,7 +39,10 @@ impl App {
     }
 
     pub fn results(&self) -> Vec<String> {
-        vec![String::from("superman"), String::from("batman")]
+        match self.return_type {
+            ReturnType::All => { vec![String::from("superman"), String::from("batman")] }
+            ReturnType::Selected => { vec![] } // TODO make this return the selected results
+        }
     }
 
     //-------- private ---------//
