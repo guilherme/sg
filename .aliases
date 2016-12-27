@@ -9,4 +9,4 @@ console:
 run-tests:
   command: build-container &&  docker run -ti -v ${PWD}:/code -v ${PWD}/tmp/cargo:/root/.cargo/ sg cargo test
 run:
-  command: build-container &&  docker run -ti -v ${PWD}:/code v ${PWD}/tmp/cargo:/root/.cargo/ sg cargo run
+  command: build-container &&  docker run -ti -v ${PWD}:/code -v ${PWD}/tmp/cargo:/root/.cargo/ sg cargo run
