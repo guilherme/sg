@@ -1,3 +1,6 @@
+use super::headless_ui::HeadlessUI;
+use super::view::View;
+
 pub enum InputSource {
     Fixed(Vec<String>),
     Stdin,
@@ -8,18 +11,7 @@ pub enum ReturnType {
     Selected,
 }
 
-pub struct HeadlessUI;
-
-impl View for HeadlessUI {
-
-    fn trigger(&self, event: &'static str) -> () {
-    }
-}
-
-trait View {
-    fn trigger(&self, event: &'static str) -> ();
-}
-
+// TODO this should be injected with the UI??
 pub struct App {
     headless: bool,
     unfiltered_results: Vec<String>,
@@ -31,17 +23,14 @@ pub struct App {
 
 impl App {
 
-
     pub fn new(headless: bool, filter: String, input: InputSource, return_type: ReturnType) -> Self {
         App { headless, filter, input, return_type, unfiltered_results: vec![], filtered_results: vec![] }
     }
 
     pub fn start(&self) -> i32 {
         self.create_ui();
-
         self.start_filtering();
         self.update_ui();
-
         0
     }
 
@@ -52,7 +41,6 @@ impl App {
     pub fn results(&self) -> Vec<String> {
         vec![String::from("superman"), String::from("batman")]
     }
-
 
     //-------- private ---------//
 
