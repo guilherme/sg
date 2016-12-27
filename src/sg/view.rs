@@ -1,3 +1,8 @@
 pub trait View {
-    fn trigger(&self, event: &'static str) -> ();
+
+    fn init(&self);
+
+    fn trigger(&self, event: &'static str);
+
 }
+

@@ -45,9 +45,10 @@ impl App {
         0
     }
 
-    pub fn view(&self) -> impl View {
-        HeadlessUI {}
+    pub fn trigger(&self, event: &'static str) {
+        self.view.trigger(event);
     }
+
 
     pub fn results(&self) -> Vec<String> {
         match self.return_type {
@@ -59,6 +60,7 @@ impl App {
     //-------- private ---------//
 
     fn create_ui(&self) {
+        self.view.init();
     }
 
     fn start_filtering(&self) {
@@ -84,7 +86,7 @@ mod tests {
         let return_type = ReturnType::All;
         let app = AppFactory::create(headless, filter, input_source, return_type);
         app.start();
-        app.view().trigger("control c");
+        app.trigger("control c");
         let results = app.results();
         assert_eq!(results, vec!["superman".to_string(), "batman".to_string()]);
     }
