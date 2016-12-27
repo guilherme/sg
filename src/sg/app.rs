@@ -11,23 +11,6 @@ pub enum ReturnType {
     Selected,
 }
 
-pub struct AppFactory;
-
-impl AppFactory {
-
-    pub fn create(headless: bool, filter: String, input: InputSource, return_type: ReturnType) -> App {
-        let view = AppFactory.create_view(headless, input);
-        App { filter, return_type, unfiltered_results: vec![], filtered_results: vec![], view }
-    }
-
-    //------- private --------//
-
-    fn create_view(self, headless: bool, input: InputSource) -> Box<impl View> {
-        Box::new(HeadlessUI {})
-    }
-
-}
-
 pub struct App {
     unfiltered_results: Vec<String>,
     filtered_results: Vec<String>,
@@ -37,6 +20,10 @@ pub struct App {
 }
 
 impl App {
+
+    pub fn new(filter: String, return_type: ReturnType, unfiltered_results: Vec<String>, filtered_results: Vec<String>, view: Box<View>) -> Self {
+        App { filter, return_type, unfiltered_results: vec![], filtered_results: vec![], view }
+    }
 
     pub fn start(&self) -> i32 {
         self.create_ui();
@@ -76,7 +63,8 @@ impl App {
 #[cfg(test)]
 mod tests {
 
-    use super::{AppFactory, InputSource, ReturnType, View};
+    use super::{InputSource, ReturnType, View};
+    use super::super::{AppFactory};
 
     #[test]
     fn it_does_basic_filtering() {
