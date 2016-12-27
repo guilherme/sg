@@ -16,19 +16,24 @@ pub struct AppFactory;
 impl AppFactory {
 
     pub fn create(headless: bool, filter: String, input: InputSource, return_type: ReturnType) -> App {
-        App { headless, filter, input, return_type, unfiltered_results: vec![], filtered_results: vec![] }
+        let view = AppFactory.create_view(headless, input);
+        App { filter, return_type, unfiltered_results: vec![], filtered_results: vec![], view }
+    }
+
+    //------- private --------//
+
+    fn create_view(self, headless: bool, input: InputSource) -> Box<impl View> {
+        Box::new(HeadlessUI {})
     }
 
 }
 
-// TODO this should be injected with the UI??
 pub struct App {
-    headless: bool,
     unfiltered_results: Vec<String>,
     filtered_results: Vec<String>,
     filter: String,
-    input: InputSource,
     return_type: ReturnType,
+    view: Box<View>,
 }
 
 impl App {
@@ -54,7 +59,6 @@ impl App {
     //-------- private ---------//
 
     fn create_ui(&self) {
-        if self.headless { println!("Running in headless mode!") }
     }
 
     fn start_filtering(&self) {
