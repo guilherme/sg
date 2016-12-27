@@ -9,7 +9,7 @@ impl HeadlessUI {
     }
 
     fn listen_for_input(&self) {
-        // TODO listen for input from the user
+        // TODO listen for input from the user what does that mean for headless?
     }
 }
 
