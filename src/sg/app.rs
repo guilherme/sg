@@ -8,13 +8,16 @@ pub enum ReturnType {
     Selected,
 }
 
-pub struct Foo;
+pub struct HeadlessUI;
 
-impl Foo {
+impl View for HeadlessUI {
 
-    pub fn trigger(&self, event: &'static str) -> () {
+    fn trigger(&self, event: &'static str) -> () {
     }
+}
 
+trait View {
+    fn trigger(&self, event: &'static str) -> ();
 }
 
 pub struct App {
@@ -35,14 +38,15 @@ impl App {
 
     pub fn start(&self) -> i32 {
         self.create_ui();
+
         self.start_filtering();
         self.update_ui();
 
         0
     }
 
-    pub fn view(&self) -> Foo {
-        Foo
+    pub fn view(&self) -> impl View {
+        HeadlessUI {}
     }
 
     pub fn results(&self) -> Vec<String> {
@@ -69,7 +73,7 @@ impl App {
 #[cfg(test)]
 mod tests {
 
-    use super::{App, InputSource, ReturnType};
+    use super::{App, InputSource, ReturnType, View};
 
     #[test]
     fn it_does_basic_filtering() {
