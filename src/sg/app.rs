@@ -11,6 +11,16 @@ pub enum ReturnType {
     Selected,
 }
 
+pub struct AppFactory;
+
+impl AppFactory {
+
+    pub fn create(headless: bool, filter: String, input: InputSource, return_type: ReturnType) -> App {
+        App { headless, filter, input, return_type, unfiltered_results: vec![], filtered_results: vec![] }
+    }
+
+}
+
 // TODO this should be injected with the UI??
 pub struct App {
     headless: bool,
@@ -22,10 +32,6 @@ pub struct App {
 }
 
 impl App {
-
-    pub fn new(headless: bool, filter: String, input: InputSource, return_type: ReturnType) -> Self {
-        App { headless, filter, input, return_type, unfiltered_results: vec![], filtered_results: vec![] }
-    }
 
     pub fn start(&self) -> i32 {
         self.create_ui();
@@ -64,7 +70,7 @@ impl App {
 #[cfg(test)]
 mod tests {
 
-    use super::{App, InputSource, ReturnType, View};
+    use super::{AppFactory, InputSource, ReturnType, View};
 
     #[test]
     fn it_does_basic_filtering() {
@@ -72,7 +78,7 @@ mod tests {
         let filter = String::from("man");
         let input_source =  InputSource::Fixed(vec!["superman".to_string(), "joker".to_string(), "batman".to_string()]);
         let return_type = ReturnType::All;
-        let app = App::new(headless, filter, input_source, return_type);
+        let app = AppFactory::create(headless, filter, input_source, return_type);
         app.start();
         app.view().trigger("control c");
         let results = app.results();

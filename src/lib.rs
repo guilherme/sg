@@ -2,4 +2,4 @@
 #![feature(conservative_impl_trait)]
 mod sg;
 
-pub use sg::{App, InputSource, ReturnType};
+pub use sg::{App, AppFactory, InputSource, ReturnType};

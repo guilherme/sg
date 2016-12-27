@@ -6,7 +6,7 @@ use clap::Arg;
 
 use std::process::exit;
 
-use sg::{App, InputSource, ReturnType};
+use sg::{AppFactory, InputSource, ReturnType};
 
 
 fn main() {
@@ -66,7 +66,7 @@ fn main() {
       None => { ReturnType::Selected }
   };
 
-  let exit_code = App::new(headless, filter, input, return_type).start();
+  let exit_code = AppFactory::create(headless, filter, input, return_type).start();
 
   exit(exit_code);
 }
