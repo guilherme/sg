@@ -26,7 +26,7 @@ impl App {
     }
 
     pub fn start(&self) -> i32 {
-        self.create_ui();
+        self.initialize_ui();
         self.start_filtering();
         self.update_ui();
         0
@@ -46,7 +46,7 @@ impl App {
 
     //-------- private ---------//
 
-    fn create_ui(&self) {
+    fn initialize_ui(&self) {
         self.view.init();
     }
 
