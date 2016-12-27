@@ -1,3 +1,3 @@
 mod app;
 
-pub use self::app::App;
+pub use self::app::{App, InputSource, ReturnType};

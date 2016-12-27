@@ -6,7 +6,8 @@ use clap::Arg;
 
 use std::process::exit;
 
-use sg::App;
+use sg::{App, InputSource, ReturnType};
+
 
 fn main() {
 
@@ -17,12 +18,55 @@ fn main() {
                         .arg(Arg::with_name("headless")
                              .short("h")
                              .long("headless")
-                             .help("Run sg without a UI. Commonly used for testing"))
+                             .help("Run without a UI. Commonly used for testing"))
+                        .arg(Arg::with_name("filter")
+                             .short("f")
+                             .long("filter")
+                             .takes_value(true)
+                             .value_name("FILTER")
+                             .help("Filter string to filter the input"))
+                        .arg(Arg::with_name("input")
+                             .short("i")
+                             .long("input")
+                             .takes_value(true)
+                             .value_name("INPUT")
+                             .help("Input to filter, defaults to STDIN"))
+                        .arg(Arg::with_name("return")
+                             .short("r")
+                             .long("return")
+                             .takes_value(true)
+                             .value_name("RETURN_TYPE")
+                             .help("Configure what you want to return.\nDefault: 'selected-rows'\nAvailable options: 'all-rows', 'selected-rows'"))
                         .get_matches();
 
   let headless = matches.is_present("headless");
 
-  let exit_code = App::new(headless).start();
+
+  let filter = match matches.value_of("filter") {
+      Some(string) => { string.to_string() },
+      None => { String::new() }
+  };
+
+  let input = match matches.value_of("input") {
+      Some(string) => { InputSource::Fixed(string.lines().map(|line| line.to_string()).collect()) }
+      None => { InputSource::Stdin }
+  };
+
+  let return_type = match matches.value_of("return") {
+      Some(string) => {
+          match string {
+              "all-rows" => { ReturnType::All }
+              "selected-rows" => { ReturnType::Selected }
+              _ => {
+                  println!("Unknown return value type");
+                  ReturnType::Selected // TODO don't do this
+              }
+          }
+      }
+      None => { ReturnType::Selected }
+  };
+
+  let exit_code = App::new(headless, filter, input, return_type).start();
 
   exit(exit_code);
 }
