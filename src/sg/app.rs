@@ -1,3 +1,6 @@
+use sg::ui::UI;
+use std::vec::Vec;
+
 pub enum InputSource {
     Fixed(Vec<String>),
     Stdin,
@@ -28,6 +31,14 @@ impl App {
         self.start_filtering();
         self.update_ui();
         0
+    }
+
+    fn view(&self) -> UI {
+      UI { }
+    }
+
+    pub fn results(&self) -> Vec<String> {
+      vec!["superman".to_string(), "batman".to_string()]
     }
 
 
