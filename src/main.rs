@@ -1,13 +1,9 @@
-extern crate sg;
 extern crate clap;
+extern crate ncurses;
 
 use clap::App as Cli;
 use clap::Arg;
-
-use std::process::exit;
-
-use sg::{App, InputSource, ReturnType};
-
+use ncurses::*;
 
 fn main() {
 
@@ -39,34 +35,61 @@ fn main() {
                              .help("Configure what you want to return.\nDefault: 'selected-rows'\nAvailable options: 'all-rows', 'selected-rows'"))
                         .get_matches();
 
-  let headless = matches.is_present("headless");
+  initscr();
+  noecho();
+  keypad(stdscr(), true);
 
+  curs_set(CURSOR_VISIBILITY::CURSOR_INVISIBLE);
 
-  let filter = match matches.value_of("filter") {
-      Some(string) => { string.to_string() },
-      None => { String::new() }
-  };
+  /* Status/help info. */
+  refresh();
 
-  let input = match matches.value_of("input") {
-      Some(string) => { InputSource::Fixed(string.lines().map(|line| line.to_string()).collect()) }
-      None => { InputSource::Stdin }
-  };
+  /* Get the screen bounds. */
+  let mut max_x = 0;
+  let mut max_y = 0;
+  /* get window bounds */
+  getmaxyx(stdscr(), &mut max_y, &mut max_x);
 
-  let return_type = match matches.value_of("return") {
-      Some(string) => {
-          match string {
-              "all-rows" => { ReturnType::All }
-              "selected-rows" => { ReturnType::Selected }
-              _ => {
-                  println!("Unknown return value type");
-                  ReturnType::Selected // TODO don't do this
-              }
-          }
-      }
-      None => { ReturnType::Selected }
-  };
+  // TODO: colorize the lines
+  /* Start in the center. */
+  /* create a box */
+  let start_y = (max_y) - 1;
+  let start_x = (max_x) - 1;
+  let win = newwin(start_y, start_x, 0, 0);
+  wrefresh(win);
+  mvwprintw(win, start_y - 1, 1, "ABC");
+  mvwprintw(win, start_y - 2, 1, "123");
+  mvwprintw(win, start_y - 3, 1, "CDE");
+  mvwprintw(win, start_y - 4, 1, "456");
+  let mut currentLineX = 1;
+  let mut currentLineY = start_y - 1;
+  mvwchgat(win,currentLineY, 0, -1, A_STANDOUT(), 1);
+  wrefresh(win);
 
-  let exit_code = App::new(headless, filter, input, return_type).start();
-
-  exit(exit_code);
+  let mut string = &mut String::new();
+  // colorize the status bar.
+  let mut ch = getch();
+  while ch != KEY_ENTER
+  {
+    match ch {
+      KEY_UP => {
+        // TODO: ADD BOUNDARIES
+        mvwchgat(win,currentLineY,0,-1, A_NORMAL(), 1);
+        currentLineY = currentLineY - 1;
+        wmove(win, currentLineY, 0);
+        mvwchgat(win,currentLineY,0,-1, A_STANDOUT(), 0);
+      },
+      KEY_DOWN => {
+        // TODO: ADD BOUNDARIES
+        mvwchgat(win,currentLineY,0,-1, A_NORMAL(), 1);
+        currentLineY = currentLineY + 1;
+        wmove(win,currentLineY, currentLineX);
+        mvwchgat(win, currentLineY,0,-1, A_STANDOUT(), 0);
+      },
+      _ => {}
+    }
+    wrefresh(win);
+    ch = getch();
+  }
+  endwin();
 }
