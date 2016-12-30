@@ -5,6 +5,7 @@ authors = ["Sebastian Glazebrook <sebglazebrook@gmail.com>", "Guilherme Reis Cam
 
 [dependencies]
 clap = "2.19.2"
+ncurses = "*"
 
 [lib]
 name = "sg"
