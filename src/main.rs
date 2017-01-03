@@ -1,12 +1,11 @@
 extern crate sg;
 extern crate clap;
-
 use clap::App as Cli;
 use clap::Arg;
 
 use std::process::exit;
 
-use sg::{App, InputSource, ReturnType};
+use sg::{AppFactory, ReturnType, DataSourceType};
 
 
 fn main() {
@@ -47,9 +46,9 @@ fn main() {
       None => { String::new() }
   };
 
-  let input = match matches.value_of("input") {
-      Some(string) => { InputSource::Fixed(string.lines().map(|line| line.to_string()).collect()) }
-      None => { InputSource::Stdin }
+  let data_source_type = match matches.value_of("input") {
+      Some(string) => { DataSourceType::Fixed(string.lines().map(|line| line.to_string()).collect()) }
+      None => { DataSourceType::Stdin }
   };
 
   let return_type = match matches.value_of("return") {
@@ -66,7 +65,7 @@ fn main() {
       None => { ReturnType::Selected }
   };
 
-  let exit_code = App::new(headless, filter, input, return_type).start();
+  let exit_code = AppFactory::create(headless, filter, return_type, data_source_type).start();
 
   exit(exit_code);
 }
