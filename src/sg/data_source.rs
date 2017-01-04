@@ -5,21 +5,6 @@ pub enum DataSourceType {
     Stdin,
 }
 
-pub struct DataSourceFactory;
-
-impl DataSourceFactory {
-
-    pub fn create(data_source_type: DataSourceType) -> DataSource {
-        match data_source_type {
-            DataSourceType::Fixed(lines) => {
-                DataSource { data_source_strategy: Box::new(FixedDataSource::new(lines)) }
-            },
-            DataSourceType::Stdin => {
-                DataSource { data_source_strategy: Box::new(FixedDataSource::new(vec![])) }
-            }
-        }
-    }
-}
 
 pub trait DataSourceLike {
     fn try_next_line(&self) -> Option<String>;
@@ -37,7 +22,7 @@ impl DataSource {
 
 }
 
-struct FixedDataSource {
+pub struct FixedDataSource {
     lines: Vec<String>,
     iterator_index: Cell<usize>,
 }
@@ -68,7 +53,8 @@ impl DataSourceLike for FixedDataSource {
 #[cfg(test)]
 mod tests {
 
-    use super::{DataSourceType, DataSourceFactory};
+    use super::DataSourceType;
+    use sg::factories::DataSourceFactory;
 
     #[test]
     fn fixed_data_source_return_lines_of_data() {

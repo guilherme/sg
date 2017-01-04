@@ -1,6 +1,7 @@
 use super::super::headless_ui::HeadlessUI;
 use super::super::view::View;
-use super::super::data_source::{DataSourceType, DataSourceFactory, DataSource};
+use super::super::data_source::{DataSourceType, DataSource};
+use super::data_source_factory::DataSourceFactory;
 use super::super::{ReturnType, App};
 
 pub struct AppFactory;
